@@ -1,2 +1,3 @@
 data/raw/hhs_facility_timeseries.csv
 data/raw/hhs_state_timeseries.csv
+*.csv
