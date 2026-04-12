@@ -27,8 +27,5 @@ rf.fit(X_train, y_train)
 
 print(f"Accuracy: {rf.score(X_test, y_test):.4f}")
 
-importance_df = pd.DataFrame({
-    'feature':    X.columns,
-    'importance': rf.feature_importances_
-}).sort_values('importance', ascending=False)
+importance_df = pd.DataFrame({'feature':    X.columns,'importance': rf.feature_importances_}).sort_values('importance', ascending=False)
 print(importance_df.to_string())
