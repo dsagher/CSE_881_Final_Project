@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 
-facility_df = pd.read_csv('../data/raw/hhs_facility_timeseries.csv')
-state_df = pd.read_csv('../data/raw/hhs_state_timeseries.csv')
+facility_df = pd.read_csv('data/raw/hhs_facility_timeseries.csv')
+state_df = pd.read_csv('data/raw/hhs_state_timeseries.csv')
 
 
 state_features = ['state', 'date', 
@@ -51,7 +51,7 @@ final_columns = ['hospital_pk', 'state', 'collection_week', 'available_beds',
 
 output_df = merged_df[final_columns].copy()
 print(output_df.isnull().sum())
-output_df.to_csv('../data/clean/clean_cols.csv', index=False)
+output_df.to_csv('data/clean/clean_cols.csv', index=False)
 
 
 
@@ -62,9 +62,9 @@ print(output_df_clean.select_dtypes(include='number').corr()['previous_day_total
 other_cols = [col for col in output_df.columns if col != 'previous_day_total_ed_visits_7_day_sum']
 
 sample_to_impute = output_df.sample(n=5000, random_state=881881, replace=False)
-sample_to_impute.to_csv("../imputation/sample_to_impute.csv")
+sample_to_impute.to_csv("imputation/sample_to_impute.csv")
 output_df_clean = output_df.dropna(subset=other_cols)
 print(output_df_clean.isnull().sum())
 sample = output_df_clean.sample(n=5000, random_state=881, replace=False)
 print(sample.isnull().sum())
-sample.to_csv('../imputation/sample.csv',index=False)
+sample.to_csv('imputation/sample.csv',index=False)

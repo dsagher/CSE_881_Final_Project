@@ -1,7 +1,9 @@
+
 library(rstan)
 library(dplyr)
 
-sample <- read.csv("sample.csv")
+
+sample <- read.csv("data/clean/sample.csv")
 sample$state_id <- as.integer(factor(sample$state))
 n_states <- n_distinct(sample$state_id)
 
@@ -42,7 +44,7 @@ beta_mean   <- mean(rstan::extract(fit, pars = "beta")$beta)
 state_levels <- levels(factor(sample$state))
 
 # load and prep the data
-to_impute <- read.csv("sample_to_impute.csv")
+to_impute <- read.csv("data/clean/sample_to_impute.csv")
 to_impute$state_id <- match(to_impute$state, state_levels)
 
 # impute using coefficients from simulation
@@ -52,4 +54,4 @@ to_impute$previous_day_total_ed_visits_7_day_sum[missing_idx] <-
   beta_mean * to_impute$inpatient_beds_utilization[missing_idx]
 
 to_impute$state_id <- NULL # lazy way to drop state id
-write.csv(to_impute, "imputed.csv", row.names = FALSE)
+write.csv(to_impute, "data/clean/imputed.csv", row.names = FALSE)

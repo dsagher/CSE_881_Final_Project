@@ -18,5 +18,5 @@ def run_models(filepath, label):
     print(f"{label}:")
     print(f"Accuracy: {accuracy_score(y_test, rf_pred):.4f}, precision: {precision_score(y_test, rf_pred):.4f}")
 
-run_models('sample_to_impute.csv', 'Original')
-run_models('imputed.csv', 'Imputed')
+run_models('data/clean/sample_to_impute.csv', 'Original')
+run_models('data/clean/imputed.csv', 'Imputed')
