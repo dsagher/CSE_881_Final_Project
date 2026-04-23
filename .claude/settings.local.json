@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:apidocs.covidactnow.org)"
+      "WebFetch(domain:apidocs.covidactnow.org)",
+      "Bash(python3 -c \"import json,sys; nb=json.load\\(sys.stdin\\); [print\\(f'--- Cell {i} \\({c[\\\\\"cell_type\\\\\"]}\\) ---\\\\n' + ''.join\\(c['source']\\)\\) for i,c in enumerate\\(nb['cells']\\)]\")",
+      "Bash(python3 -c \"import pandas as pd; df = pd.read_csv\\('data/clean/final_featuresv2.csv'\\); print\\(df.columns.tolist\\(\\)\\); print\\(df.shape\\); print\\(df.describe\\(\\)\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(pip show *)",
+      "Bash(streamlit run *)",
+      "Bash(curl -s http://localhost:8501)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('app.py'\\).read\\(\\)\\); print\\('Syntax OK'\\)\")"
     ]
   }
 }
