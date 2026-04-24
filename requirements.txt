@@ -1,4 +1,6 @@
 pandas
 numpy
 plotly
-sklearn
+scikit-learn
+xgboost
+streamlit
