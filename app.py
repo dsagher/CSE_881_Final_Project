@@ -140,44 +140,44 @@ with col_charts:
     st.plotly_chart(gauge, use_container_width=True)
 
     # ── Delta bar chart ───────────────────────────────────────────────────────
-    st.subheader("Per-Feature Contribution vs. Baseline")
-    st.caption("How much each slider — moved from its median to its current value — shifts the prediction.")
+    # st.subheader("Per-Feature Contribution vs. Baseline")
+    # st.caption("How much each slider — moved from its median to its current value — shifts the prediction.")
 
-    # ── Sensitivity lines ─────────────────────────────────────────────────────
-    st.subheader("Feature Impact — How Each Slider Shifts the Prediction")
-    st.caption("Each line shows the predicted bed usage when that feature varies across its full range, with all others held at current slider values.")
+    # # ── Sensitivity lines ─────────────────────────────────────────────────────
+    # st.subheader("Feature Impact — How Each Slider Shifts the Prediction")
+    # st.caption("Each line shows the predicted bed usage when that feature varies across its full range, with all others held at current slider values.")
 
-    impacts = sensitivity_chart(model, slider_vals, feature_cols, feature_medians)
+    # impacts = sensitivity_chart(model, slider_vals, feature_cols, feature_medians)
 
-    fig = go.Figure()
-    for feat, data in impacts.items():
-        current_x = slider_vals[feat]
-        fig.add_trace(go.Scatter(
-            x=data["x"], y=data["y"],
-            mode="lines",
-            name=data["label"],
-            hovertemplate=f"{data['label']}<br>Value: %{{x:.3f}}<br>Predicted: %{{y:.1f}}%<extra></extra>",
-        ))
-        current_pred = model.predict(build_input_row({**slider_vals, feat: current_x}, feature_cols, feature_medians))[0]
-        fig.add_trace(go.Scatter(
-            x=[current_x], y=[current_pred],
-            mode="markers",
-            marker=dict(size=9, symbol="circle"),
-            showlegend=False,
-            hoverinfo="skip",
-        ))
+    # fig = go.Figure()
+    # for feat, data in impacts.items():
+    #     current_x = slider_vals[feat]
+    #     fig.add_trace(go.Scatter(
+    #         x=data["x"], y=data["y"],
+    #         mode="lines",
+    #         name=data["label"],
+    #         hovertemplate=f"{data['label']}<br>Value: %{{x:.3f}}<br>Predicted: %{{y:.1f}}%<extra></extra>",
+    #     ))
+    #     current_pred = model.predict(build_input_row({**slider_vals, feat: current_x}, feature_cols, feature_medians))[0]
+    #     fig.add_trace(go.Scatter(
+    #         x=[current_x], y=[current_pred],
+    #         mode="markers",
+    #         marker=dict(size=9, symbol="circle"),
+    #         showlegend=False,
+    #         hoverinfo="skip",
+    #     ))
 
-    fig.add_hline(y=y_mean, line_dash="dot", line_color="gray",
-                  annotation_text=f"Mean ({y_mean:.1f}%)", annotation_position="bottom right")
-    fig.update_layout(
-        xaxis_title="Feature Value",
-        yaxis_title="Predicted Beds Used (%)",
-        height=420,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        margin=dict(t=60, b=40, l=40, r=20),
-        hovermode="x unified",
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    # fig.add_hline(y=y_mean, line_dash="dot", line_color="gray",
+    #               annotation_text=f"Mean ({y_mean:.1f}%)", annotation_position="bottom right")
+    # fig.update_layout(
+    #     xaxis_title="Feature Value",
+    #     yaxis_title="Predicted Beds Used (%)",
+    #     height=420,
+    #     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    #     margin=dict(t=60, b=40, l=40, r=20),
+    #     hovermode="x unified",
+    # )
+    # st.plotly_chart(fig, use_container_width=True)
 
     # ── Delta bar chart ───────────────────────────────────────────────────────
     st.subheader("Per-Feature Contribution vs. Baseline")
