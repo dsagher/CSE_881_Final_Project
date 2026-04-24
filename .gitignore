@@ -1,4 +1,12 @@
 data/raw/hhs_facility_timeseries.csv
 data/raw/hhs_state_timeseries.csv
-*.csv
 .claude/
+data/clean/clean_cols.csv
+data/clean/final_features.csv
+data/clean/imputation_coefficients.csv
+imputed.csv
+sample_to_impute.csv
+sample.csv
+state_clean.csv
+state_imputed.csv
+data/raw/
