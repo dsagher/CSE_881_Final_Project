@@ -5,43 +5,7 @@ import plotly.graph_objects as go
 from sklearn.ensemble import RandomForestRegressor
 
 st.set_page_config(page_title="Inpatient Bed Usage Predictor", layout="wide")
-
 SEED = 42
-
-SLIDER_FEATURES = {
-    "inpatient_beds_utilization_normalized": {
-        "label": "Bed Utilization Rate (normalized)",
-        "min": 0.0, "max": 0.31, "step": 0.001,
-    },
-    "previous_day_admission_adult_covid_confirmed_normalized": {
-        "label": "Adult COVID Confirmed Admissions (norm.)",
-        "min": 0.0, "max": 11.4, "step": 0.01,
-    },
-    "previous_day_admission_adult_covid_suspected_normalized": {
-        "label": "Adult COVID Suspected Admissions (norm.)",
-        "min": 0.0, "max": 23.0, "step": 0.01,
-    },
-    "previous_day_admission_adult_covid_confirmed_80_normalized": {
-        "label": "COVID Confirmed 80+ Adult Admissions (norm.)",
-        "min": 0.0, "max": 2.8, "step": 0.01,
-    },
-    "state_staffing_shortage_ratio": {
-        "label": "Staffing Shortage Ratio",
-        "min": 0.0, "max": 1.0, "step": 0.01,
-    },
-    "state_staffing_shortage_anticipation_ratio": {
-        "label": "Anticipated Staffing Shortage Ratio",
-        "min": 0.0, "max": 0.82, "step": 0.01,
-    },
-    "on_hand_supply_therapeutic_a_casirivimab_imdevimab_courses": {
-        "label": "Monoclonal Antibody Supply (Casirivimab/Imdevimab)",
-        "min": 0, "max": 31111, "step": 100,
-    },
-    "icu_patients_confirmed_influenza": {
-        "label": "ICU Patients — Confirmed Influenza",
-        "min": 0, "max": 275, "step": 1,
-    },
-}
 
 @st.cache_resource(show_spinner="Training model on full dataset...")
 def load_model_and_data():
@@ -62,7 +26,68 @@ def load_model_and_data():
     model = RandomForestRegressor(random_state=SEED, max_features="sqrt", n_jobs=-1)
     model.fit(X, y)
 
-    return model, X.columns.tolist(), feature_medians, float(y.mean()), float(y.min()), float(y.max())
+    return model, X.columns.tolist(), feature_medians, float(y.mean()), float(y.min()), float(y.max()), df
+
+model, feature_cols, feature_medians, y_mean, y_min, y_max, df = load_model_and_data()
+
+important_features = ['beds_used_lag1', 'beds_used_lag2', 'beds_used_rolling4',
+       'state_staffing_shortage_ratio_lag2',
+       'previous_day_admission_adult_covid_confirmed_80_normalized',
+       'previous_day_admission_adult_covid_confirmed_50_59_normalized',
+       'previous_day_admission_adult_covid_suspected_60_69_normalized',
+       'previous_day_admission_influenza_confirmed_normalized']
+
+SLIDER_FEATURES = {
+    important_features[0]: {
+        "label": important_features[0],
+        "min": min(df[important_features[0]]),
+        "max": max(df[important_features[0]]),
+        "step": max(df[important_features[0]])/100,
+    },
+    important_features[1]: {
+        "label": important_features[1],
+        "min": min(df[important_features[1]]), 
+        "max": max(df[important_features[1]]), 
+        "step": max(df[important_features[1]])/100,
+    },
+    important_features[2]: {
+        "label": important_features[2],
+        "min": min(df[important_features[2]]), 
+        "max": max(df[important_features[2]]), 
+        "step": max(df[important_features[2]])/100,
+    },
+    important_features[3]: {
+        "label": important_features[3],
+        "min": min(df[important_features[3]]), 
+        "max": max(df[important_features[3]]), 
+        "step": max(df[important_features[3]])/100,
+    },
+    important_features[4]: {
+        "label": important_features[4],
+        "min": min(df[important_features[4]]), 
+        "max": max(df[important_features[4]]), 
+        "step": max(df[important_features[4]])/100,
+    },
+    important_features[5]: {
+        "label": important_features[5],
+        "min": min(df[important_features[5]]), 
+        "max": max(df[important_features[5]]), 
+        "step": max(df[important_features[5]])/100,
+    },
+    important_features[6]: {
+        "label": important_features[6],
+        "min": min(df[important_features[6]]), 
+        "max": max(df[important_features[6]]), 
+        "step": max(df[important_features[6]])/100,
+    },
+    important_features[7]: {
+        "label": important_features[7],
+        "min": min(df[important_features[7]]), 
+        "max": max(df[important_features[7]]), 
+        "step": max(df[important_features[7]])/100,
+    },
+}
+
 
 
 def build_input_row(slider_vals: dict, feature_cols: list, feature_medians: dict) -> pd.DataFrame:
@@ -91,7 +116,6 @@ def sensitivity_chart(model, slider_vals, feature_cols, feature_medians, steps=6
 st.title("Inpatient Bed Usage Predictor")
 st.caption("Adjust the sliders to explore how each factor affects predicted hospital inpatient bed usage.")
 
-model, feature_cols, feature_medians, y_mean, y_min, y_max = load_model_and_data()
 
 col_sliders, col_charts = st.columns([1, 2], gap="large")
 
