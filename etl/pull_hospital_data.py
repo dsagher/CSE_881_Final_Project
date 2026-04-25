@@ -1,29 +1,4 @@
 #!/usr/bin/env python3
-"""
-Hospital Bed Availability ETL
-==============================
-Sources (no API key required):
-  - HHS HealthData.gov — facility-level weekly hospital capacity  (anag-cw7u)
-  - HHS HealthData.gov — state-level daily timeseries             (g62h-syeh)
-
-Both datasets use the Socrata Open Data API (SODA) and are completely public.
-Data runs from ~Jan 2020 through May 2024 (collection ended May 3, 2024).
-
-Usage:
-    pip install -r requirements.txt
-    python etl/pull_hospital_data.py
-
-Output files (data/raw/):
-    hhs_facility_timeseries.csv   ~GB-scale, 129 cols, facility × week rows
-    hhs_state_timeseries.csv      ~81k rows, 50 cols, state × day rows
-
-Model → field mapping:
-  Survival analysis   →  inpatient_beds*, inpatient_beds_used* (derive available = capacity - used)
-  Regression / Lasso  →  inpatient_beds_used_covid*, staffed_adult_icu*, admission counts, utilization ratios
-  LSTM                →  all of the above as ordered timeseries per facility or state
-  Risk score          →  inpatient_bed_covid_utilization*, icu_utilization_*
-"""
-
 import csv
 import logging
 import sys
@@ -39,9 +14,9 @@ OUTPUT_DIR = Path(__file__).parent.parent / "data" / "raw"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Socrata settings
-PAGE_SIZE   = 50_000   # rows per request (Socrata max is typically 50k)
+PAGE_SIZE   = 50_000   
 MAX_RETRIES = 6
-SLEEP_BETWEEN_PAGES = 0.3  # seconds — stays well under anonymous rate limits
+SLEEP_BETWEEN_PAGES = 0.3 
 
 logging.basicConfig(
     level=logging.INFO,
